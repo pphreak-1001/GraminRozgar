@@ -146,7 +146,7 @@ function EmployerDashboard({ user, onLogout }) {
 
           {myJobs.length === 0 ? (
             <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <p className="text-gray-600">No jobs posted yet. Post your first job!</p>
+              <p className="text-gray-600">{t('noJobsPosted')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -156,10 +156,10 @@ function EmployerDashboard({ user, onLogout }) {
                   <p className="text-gray-700 mb-3">{job.description}</p>
                   <div className="space-y-2 text-sm text-gray-600 mb-4">
                     <p>📍 {job.village}, {job.district}, {job.state}</p>
-                    <p className="font-bold text-green-600">💰 ₹{job.daily_wage_offered}/day</p>
+                    <p className="font-bold text-green-600">💰 ₹{job.daily_wage_offered}{t('perDay')}</p>
                     <p>📞 {job.contact_number}</p>
                     <p className="bg-blue-100 text-blue-800 px-2 py-1 rounded inline-block">
-                      {job.match_count} worker matches
+                      {job.match_count} {t('workerMatches')}
                     </p>
                   </div>
                   <button
@@ -167,7 +167,7 @@ function EmployerDashboard({ user, onLogout }) {
                     data-testid={`view-matches-button-${idx}`}
                     className="w-full bg-indigo text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-800 transition-all"
                   >
-                    View Matched Workers
+                    {t('viewMatchedWorkers')}
                   </button>
                 </div>
               ))}
