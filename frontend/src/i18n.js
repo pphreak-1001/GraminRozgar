@@ -142,6 +142,23 @@ const resources = {
       callEmployer: "Call Employer",
       jobsPosted: "Jobs Posted",
       totalMatches: "Total Matches",
+      
+      // Audio signup
+      transcribedText: "Transcribed Text",
+      extractedDetails: "Extracted Details",
+      tryAgain: "Try Again",
+      registrationSuccess: "Registration successful!",
+      tempPasswordIs: "Your temporary password is",
+      pleaseRemember: "Please remember it.",
+      phoneAlreadyRegistered: "This phone number is already registered. Please login instead.",
+      registrationError: "Registration failed. Please try again.",
+      transcribingAudio: "Transcribing audio...",
+      parsingDetails: "Extracting your details...",
+      processingError: "Error processing audio. Please try again.",
+      incompleteData: "Please provide all required information. Try recording again.",
+      microphoneAccessError: "Unable to access microphone. Please check permissions.",
+      clickToStop: "Click the button to stop recording",
+      originalLanguage: "Auto-translated",
     }
   },
   hi: {
@@ -268,6 +285,23 @@ const resources = {
       callEmployer: "नियोक्ता को कॉल करें",
       jobsPosted: "काम पोस्ट किए गए",
       totalMatches: "कुल मिलान",
+      
+      // Audio signup
+      transcribedText: "ट्रांसक्राइब किया गया टेक्स्ट",
+      extractedDetails: "निकाला गया विवरण",
+      tryAgain: "फिर से कोशिश करें",
+      registrationSuccess: "पंजीकरण सफल!",
+      tempPasswordIs: "आपका अस्थायी पासवर्ड है",
+      pleaseRemember: "कृपया इसे याद रखें।",
+      phoneAlreadyRegistered: "यह फोन नंबर पहले से पंजीकृत है। कृपया लॉगिन करें।",
+      registrationError: "पंजीकरण विफल। कृपया पुनः प्रयास करें।",
+      transcribingAudio: "ऑडियो ट्रांसक्राइब हो रहा है...",
+      parsingDetails: "आपका विवरण निकाला जा रहा है...",
+      processingError: "ऑडियो प्रोसेसिंग में त्रुटि। कृपया पुनः प्रयास करें।",
+      incompleteData: "कृपया सभी आवश्यक जानकारी दें। फिर से रिकॉर्ड करें।",
+      microphoneAccessError: "माइक्रोफोन तक पहुँच नहीं। कृपया अनुमतियाँ जांचें।",
+      clickToStop: "रिकॉर्डिंग रोकने के लिए बटन दबाएं",
+      originalLanguage: "स्वतः अनुवादित",
     }
   },
   bn: {
@@ -394,6 +428,23 @@ const resources = {
       callEmployer: "নিয়োগকর্তাকে কল করুন",
       jobsPosted: "কাজ পোস্ট করা হয়েছে",
       totalMatches: "মোট মিল",
+      
+      // Audio signup
+      transcribedText: "প্রতিলিপি করা টেক্সট",
+      extractedDetails: "নিষ্কাশিত বিবরণ",
+      tryAgain: "আবার চেষ্টা করুন",
+      registrationSuccess: "নিবন্ধন সফল!",
+      tempPasswordIs: "আপনার অস্থায়ী পাসওয়ার্ড হল",
+      pleaseRemember: "দয়া করে এটি মনে রাখুন।",
+      phoneAlreadyRegistered: "এই ফোন নম্বর ইতিমধ্যে নিবন্ধিত। দয়া করে লগইন করুন।",
+      registrationError: "নিবন্ধন ব্যর্থ। আবার চেষ্টা করুন।",
+      transcribingAudio: "অডিও প্রতিলিপি করা হচ্ছে...",
+      parsingDetails: "আপনার বিবরণ বের করা হচ্ছে...",
+      processingError: "অডিও প্রক্রিয়াকরণে ত্রুটি। আবার চেষ্টা করুন।",
+      incompleteData: "সমস্ত প্রয়োজনীয় তথ্য দিন। আবার রেকর্ড করুন।",
+      microphoneAccessError: "মাইক্রোফোনে অ্যাক্সেস করতে অক্ষম। অনুমতি পরীক্ষা করুন।",
+      clickToStop: "রেকর্ডিং বন্ধ করতে বোতামে ক্লিক করুন",
+      originalLanguage: "স্বয়ংক্রিয়ভাবে অনুবাদিত",
     }
   },
   te: {
