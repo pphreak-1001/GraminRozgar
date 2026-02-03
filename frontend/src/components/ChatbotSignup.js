@@ -127,7 +127,7 @@ function ChatbotSignup({ onClose, onSuccess }) {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your answer..."
+                placeholder={t('typeYourAnswer')}
                 data-testid="chatbot-input"
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-saffron focus:border-transparent"
               />
