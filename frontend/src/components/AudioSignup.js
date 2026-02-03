@@ -51,16 +51,16 @@ function AudioSignup({ onClose, onSuccess }) {
 
         <div className="text-center">
           <div className="mb-8">
-            <p className="text-gray-700 mb-4">
-              Click the microphone and speak your details:
+            <p className="text-gray-700 mb-4 font-medium text-lg">
+              {t('clickMicAndSpeak')}
             </p>
-            <ul className="text-left text-gray-600 space-y-2 mb-6">
-              <li>• Your name</li>
-              <li>• Your village/area</li>
-              <li>• Your district and state</li>
-              <li>• Type of work you do</li>
-              <li>• Expected daily wage</li>
-              <li>• Phone number</li>
+            <ul className="text-left text-gray-600 space-y-2 mb-6 max-w-md mx-auto">
+              <li>• {t('yourName')}</li>
+              <li>• {t('yourVillage')}</li>
+              <li>• {t('yourDistrict')}</li>
+              <li>• {t('typeOfWork')}</li>
+              <li>• {t('expectedDailyWage')}</li>
+              <li>• {t('phoneNumber')}</li>
             </ul>
           </div>
 
