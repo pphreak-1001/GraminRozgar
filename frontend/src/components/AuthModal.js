@@ -284,7 +284,7 @@ function AuthModal({ onClose, onSuccess }) {
               }}
               className="text-saffron hover:text-orange-600 font-medium"
             >
-              {isLogin ? "Don't have an account? Register" : 'Already have an account? Login'}
+              {isLogin ? `${t('dontHaveAccount')} ${t('registerHere')}` : `${t('alreadyHaveAccount')} ${t('loginHere')}`}
             </button>
           </div>
         </div>
