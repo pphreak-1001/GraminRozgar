@@ -79,14 +79,14 @@ function AudioSignup({ onClose, onSuccess }) {
               <div className="w-32 h-32 bg-red-500 rounded-full flex items-center justify-center mx-auto animate-pulse">
                 <Square className="w-16 h-16 text-white" />
               </div>
-              <p className="text-red-600 font-bold">Recording... Speak now!</p>
+              <p className="text-red-600 font-bold text-lg">{t('recordingSpeakNow')}</p>
             </div>
           )}
 
           {loading && (
             <div className="text-center">
               <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-indigo mx-auto"></div>
-              <p className="mt-4 text-gray-600">Processing audio...</p>
+              <p className="mt-4 text-gray-600 font-medium">{t('processingAudio')}</p>
             </div>
           )}
 
