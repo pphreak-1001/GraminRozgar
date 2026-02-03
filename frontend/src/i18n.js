@@ -141,6 +141,7 @@ const resources = {
       demoMode: "DEMO MODE",
       audioTranscriptionDemo: "Audio transcription is currently a mock feature. In production, this would use OpenAI Whisper API to convert your speech to text.",
       useNormalSignup: "Please use the normal signup form to complete registration.",
+      send: "Send",
     }
   },
   hi: {
