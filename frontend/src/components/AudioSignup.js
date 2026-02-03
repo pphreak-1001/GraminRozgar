@@ -97,12 +97,11 @@ function AudioSignup({ onClose, onSuccess }) {
               </div>
               <div className="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4 mb-4">
                 <p className="text-sm text-gray-700">
-                  ⚠️ <strong>DEMO MODE:</strong> Audio transcription is currently a mock feature. 
-                  In production, this would use OpenAI Whisper API to convert your speech to text.
+                  ⚠️ <strong>{t('demoMode')}:</strong> {t('audioTranscriptionDemo')}
                 </p>
               </div>
               <p className="text-sm text-gray-600 mb-4">
-                Please use the normal signup form to complete registration.
+                {t('useNormalSignup')}
               </p>
               <button
                 onClick={onClose}
