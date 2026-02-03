@@ -1,0 +1,47 @@
+# Docker Compose for GraminRozgar
+# Run with: docker-compose up -d
+
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: graminrozgar-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=graminrozgar
+    networks:
+      - graminrozgar-network
+
+  # GraminRozgar Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_BACKEND_URL: ""  # Empty for same-origin API calls
+    container_name: graminrozgar-app
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/graminrozgar
+      - JWT_SECRET=${JWT_SECRET:-graminrozgar_secret_key_2025}
+      - EMERGENT_LLM_KEY=${EMERGENT_LLM_KEY}
+    depends_on:
+      - mongodb
+    networks:
+      - graminrozgar-network
+
+volumes:
+  mongodb_data:
+    driver: local
+
+networks:
+  graminrozgar-network:
+    driver: bridge
