@@ -320,7 +320,7 @@ async def get_worker_profile(current_user = Depends(get_current_user)):
 
 @app.get("/api/workers/matches")
 async def get_worker_matches(current_user = Depends(get_current_user)):
-    """Get job matches for the logged-in worker"""
+    """Get job matches for the logged-in worker with translated content"""
     if current_user["role"] != UserRole.WORKER:
         raise HTTPException(status_code=403, detail="Only workers can access this")
     
@@ -329,16 +329,24 @@ async def get_worker_matches(current_user = Depends(get_current_user)):
     if not worker:
         raise HTTPException(status_code=404, detail="Worker profile not found")
     
+    # Get worker's language preference
+    worker_lang = worker.get("language", "hi")
+    
     # Get matches
     matches = await matches_collection.find(
         {"worker_id": worker["worker_id"], "status": "pending"}
     ).sort("match_score", -1).to_list(50)
     
-    # Populate job details
+    # Populate job details with translation
     result = []
     for match in matches:
         job = await jobs_collection.find_one({"job_id": match["job_id"]})
         if job:
+            # Translate job title and description if not in worker's language
+            if worker_lang != "en":
+                job["title"] = await translate_text(job["title"], worker_lang)
+                job["description"] = await translate_text(job["description"], worker_lang)
+            
             job.pop("_id", None)
             match.pop("_id", None)
             result.append({"match": match, "job": job})
