@@ -369,7 +369,6 @@ const resources = {
       noResults: "কোন ফলাফল পাওয়া যায়নি",
       
       aboutUs: "আমাদের সম্পর্কে",
-      contact: "যোগাযোগ করুন",
       helpline: "হেল্পলাইন",
       language: "ভাষা",
       madeWithLove: "গ্রামীণ ভারতের জন্য ❤️ দিয়ে তৈরি",
