@@ -663,15 +663,37 @@ async def run_matching_engine():
 
 
 async def send_mock_notification(worker: dict, job: dict, score: float):
-    """Mock SMS/Voice notification system"""
+    """Mock SMS/Voice notification system with multilingual support"""
+    
+    # Get worker's language preference
+    worker_lang = worker.get("language", "hi")
+    
+    # Language-specific notification templates
+    templates = {
+        "hi": f"नमस्कार {worker['name']}! आपके लिए एक नया काम मिल गया है। {job['title']} - {job['village']}, {job['district']}। दैनिक मजदूरी: ₹{job['daily_wage_offered']}। संपर्क: {job['contact_number']}। मैच स्कोर: {score:.0f}%",
+        "en": f"Hello {worker['name']}! A new job has been found for you. {job['title']} - {job['village']}, {job['district']}. Daily wage: ₹{job['daily_wage_offered']}. Contact: {job['contact_number']}. Match score: {score:.0f}%",
+        "bn": f"নমস্কার {worker['name']}! আপনার জন্য একটি নতুন কাজ পাওয়া গেছে। {job['title']} - {job['village']}, {job['district']}। দৈনিক মজুরি: ₹{job['daily_wage_offered']}। যোগাযোগ: {job['contact_number']}। মিল স্কোর: {score:.0f}%",
+        "te": f"నమస్కారం {worker['name']}! మీ కోసం ఒక కొత్త ఉద్యోగం దొరికింది। {job['title']} - {job['village']}, {job['district']}। రోజువారీ వేతనం: ₹{job['daily_wage_offered']}। సంప్రదించండి: {job['contact_number']}। మ్యాచ్ స్కోర్: {score:.0f}%",
+        "mr": f"नमस्कार {worker['name']}! तुमच्यासाठी नवीन काम सापडले आहे। {job['title']} - {job['village']}, {job['district']}। दैनिक मजुरी: ₹{job['daily_wage_offered']}। संपर्क: {job['contact_number']}। मॅच स्कोअर: {score:.0f}%",
+        "ta": f"வணக்கம் {worker['name']}! உங்களுக்காக ஒரு புதிய வேலை கிடைத்துள்ளது। {job['title']} - {job['village']}, {job['district']}। தினசரி ஊதியம்: ₹{job['daily_wage_offered']}। தொடர்பு: {job['contact_number']}। பொருத்த மதிப்பெண்: {score:.0f}%",
+        "gu": f"નમસ્તે {worker['name']}! તમારા માટે નવી નોકરી મળી છે। {job['title']} - {job['village']}, {job['district']}। દૈનિક મજૂરી: ₹{job['daily_wage_offered']}। સંપર્ક: {job['contact_number']}। મેચ સ્કોર: {score:.0f}%",
+        "kn": f"ನಮಸ್ಕಾರ {worker['name']}! ನಿಮಗಾಗಿ ಹೊಸ ಕೆಲಸ ಸಿಕ್ಕಿದೆ। {job['title']} - {job['village']}, {job['district']}। ದೈನಂದಿನ ವೇತನ: ₹{job['daily_wage_offered']}। ಸಂಪರ್ಕಿಸಿ: {job['contact_number']}। ಮ್ಯಾಚ್ ಸ್ಕೋರ್: {score:.0f}%",
+        "ml": f"നമസ്കാരം {worker['name']}! നിങ്ങൾക്കായി ഒരു പുതിയ ജോലി കണ്ടെത്തി। {job['title']} - {job['village']}, {job['district']}। ദിവസ വേതനം: ₹{job['daily_wage_offered']}। ബന്ധപ്പെടുക: {job['contact_number']}। മാച്ച് സ്കോർ: {score:.0f}%",
+        "pa": f"ਸਤ ਸ੍ਰੀ ਅਕਾਲ {worker['name']}! ਤੁਹਾਡੇ ਲਈ ਨਵੀਂ ਨੌਕਰੀ ਮਿਲੀ ਹੈ। {job['title']} - {job['village']}, {job['district']}। ਰੋਜ਼ਾਨਾ ਮਜ਼ਦੂਰੀ: ₹{job['daily_wage_offered']}। ਸੰਪਰਕ: {job['contact_number']}। ਮੈਚ ਸਕੋਰ: {score:.0f}%",
+    }
+    
+    # Get message in worker's language, fallback to Hindi
+    message = templates.get(worker_lang, templates["hi"])
+    
     notification_doc = {
         "notification_id": str(uuid.uuid4()),
         "worker_id": worker["worker_id"],
         "job_id": job["job_id"],
         "type": "sms",
-        "message": f"Namaskar {worker['name']}! Aapke liye ek naya kaam mil gaya hai. {job['title']} - {job['village']}, {job['district']}. Daily wage: ₹{job['daily_wage_offered']}. Contact: {job['contact_number']}. Match score: {score:.0f}%",
+        "message": message,
         "phone_number": worker["phone_number"],
         "status": "mock_sent",
+        "language": worker_lang,
         "sent_at": datetime.utcnow()
     }
     await notifications_collection.insert_one(notification_doc)
