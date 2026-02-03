@@ -341,11 +341,11 @@ function EmployerDashboard({ user, onLogout }) {
             <div className="p-6">
               <div className="flex items-center space-x-3 mb-6">
                 <Users className="w-8 h-8 text-indigo" />
-                <h2 className="text-2xl font-bold text-gray-900">Matched Workers for: {selectedJob.title}</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t('matchedWorkersFor')} {selectedJob.title}</h2>
               </div>
 
               {jobMatches.length === 0 ? (
-                <p className="text-center text-gray-600 py-8">No worker matches yet. The matching engine runs every 5 minutes.</p>
+                <p className="text-center text-gray-600 py-8">{t('noWorkersMatched')}</p>
               ) : (
                 <div className="space-y-4">
                   {jobMatches.map((item, idx) => (
@@ -356,12 +356,12 @@ function EmployerDashboard({ user, onLogout }) {
                           <p className="text-sm text-gray-600">{item.worker.job_type}</p>
                         </div>
                         <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">
-                          {Math.round(item.match.match_score)}% Match
+                          {Math.round(item.match.match_score)}% {t('matchScore')}
                         </span>
                       </div>
                       <div className="space-y-1 text-sm text-gray-700">
                         <p>📍 {item.worker.area}, {item.worker.district}, {item.worker.state}</p>
-                        <p>💰 Expected Wage: ₹{item.worker.expected_daily_wage}/day</p>
+                        <p>💰 {t('expectedWage')}: ₹{item.worker.expected_daily_wage}{t('perDay')}</p>
                         <p className="font-bold text-indigo">📞 {item.worker.phone_number}</p>
                       </div>
                     </div>
