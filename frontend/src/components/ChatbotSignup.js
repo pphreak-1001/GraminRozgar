@@ -77,7 +77,7 @@ function ChatbotSignup({ onClose, onSuccess }) {
         <div className="bg-gradient-to-r from-saffron to-orange-600 text-white p-6 rounded-t-2xl flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold">{t('signupChatbot')}</h2>
-            <p className="text-sm opacity-90">Conversational Registration</p>
+            <p className="text-sm opacity-90">{t('conversationalRegistration')}</p>
           </div>
           <button
             onClick={onClose}
