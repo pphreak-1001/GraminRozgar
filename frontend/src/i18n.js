@@ -133,7 +133,6 @@ const resources = {
       yourDistrict: "Your district and state",
       typeOfWork: "Type of work you do",
       expectedDailyWage: "Expected daily wage",
-      phoneNumber: "Phone number",
       recordingSpeakNow: "Recording... Speak now!",
       processingAudio: "Processing audio...",
       demoMode: "DEMO MODE",
