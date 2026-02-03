@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.eggs/
+*.egg-info/
+*.egg
+
+# Build outputs
+frontend/build/
+dist/
+build/
+
+# Environment files (should be configured at runtime)
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test files
+coverage/
+.pytest_cache/
+test_reports/
+*.xml
+
+# Git
+.git/
+.gitignore
+
+# Docker
+.dockerignore
+
+# Misc
+*.md
+!README.md
+LICENSE
+.emergent/
+memory/
