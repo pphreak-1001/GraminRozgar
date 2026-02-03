@@ -7,18 +7,31 @@ const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001/api'
 
 function ChatbotSignup({ onClose, onSuccess }) {
   const { t, i18n } = useTranslation();
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: i18n.language === 'hi' 
-        ? 'नमस्ते! मैं आपकी मदद करूंगा। कृपया अपना नाम बताइए।' 
-        : 'Hello! I will help you register. Please tell me your name.'
-    }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionId] = useState(() => `session_${Date.now()}_${Math.random()}`);
   const [registrationComplete, setRegistrationComplete] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+
+  // Initialize with language-specific greeting
+  useEffect(() => {
+    if (!initialized) {
+      const greetings = {
+        hi: 'नमस्ते! मैं आपकी मदद करूंगा। कृपया अपना नाम बताइए।',
+        en: 'Hello! I will help you register. Please tell me your name.',
+        bn: 'নমস্কার! আমি আপনার সাহায্যকারী। আপনার নাম কি?',
+        te: 'నమస్కారం! నేను మీకు సహాయం చేస్తాను। మీ పేరు ఏమిటి?',
+        mr: 'नमस्कार! मी तुम्हाला मदत करेन। तुमचे नाव काय आहे?',
+        ta: 'வணக்கம்! நான் உங்களுக்கு உதவுவேன். உங்கள் பெயர் என்ன?',
+        gu: 'નમસ્તે! હું તમારી મદદ કરીશ। તમારું નામ શું છે?',
+      };
+      
+      const greeting = greetings[i18n.language] || greetings.hi;
+      setMessages([{ role: 'assistant', content: greeting }]);
+      setInitialized(true);
+    }
+  }, [i18n.language, initialized]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
