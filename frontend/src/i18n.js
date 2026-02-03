@@ -23,6 +23,8 @@ const resources = {
       heroTitle: "Work Near You, Fair Wage for You",
       heroSubtitle: "No middlemen. No confusion. Just honest work.",
       getStarted: "Get Started",
+      tollFreeText: "Toll-Free Helpline:",
+      callForRegistration: "Call for audio-based registration",
       
       // Features
       features: "How It Works",
@@ -35,6 +37,7 @@ const resources = {
       
       // Signup methods
       signupTitle: "Three Easy Ways to Sign Up",
+      signupChooseMethod: "Choose the method that works best for you",
       signupNormal: "Normal Signup",
       signupNormalDesc: "Fill a simple form",
       signupChatbot: "Chatbot Signup",
@@ -64,6 +67,45 @@ const resources = {
       cancel: "Cancel",
       close: "Close",
       save: "Save",
+      role: "I am a",
+      
+      // Worker Dashboard
+      welcomeWorker: "Namaskar",
+      workerDashboard: "Worker Dashboard",
+      matchedJobs: "Matched Jobs for You",
+      noMatchesYet: "No job matches yet. We'll notify you when we find suitable work!",
+      matchScore: "Match",
+      perDay: "/day",
+      contact: "Contact",
+      notifications: "Notifications",
+      noNotifications: "No notifications yet.",
+      
+      // Employer Dashboard
+      welcomeEmployer: "Welcome",
+      employerDashboard: "Employer Dashboard",
+      noJobsPosted: "No jobs posted yet. Post your first job!",
+      workerMatches: "worker matches",
+      viewMatchedWorkers: "View Matched Workers",
+      matchedWorkersFor: "Matched Workers for:",
+      noWorkersMatched: "No worker matches yet. The matching engine runs every 5 minutes.",
+      expectedWage: "Expected Wage",
+      
+      // Job Form
+      jobTitle: "Job Title",
+      dailyWageOffered: "Daily Wage Offered (₹)",
+      contactNumber: "Contact Number",
+      requiredSkills: "Required Skills (comma-separated)",
+      village: "Village",
+      postJobSuccess: "Job posted successfully!",
+      
+      // Auth
+      dontHaveAccount: "Don't have an account?",
+      alreadyHaveAccount: "Already have an account?",
+      registerHere: "Register here",
+      loginHere: "Login here",
+      createAccount: "Create an Account",
+      joinUs: "Join us to find your next opportunity",
+      welcomeBack: "Welcome back!",
       
       // Messages
       loading: "Loading...",
@@ -76,6 +118,29 @@ const resources = {
       contact: "Contact",
       helpline: "Helpline",
       language: "Language",
+      madeWithLove: "Made with ❤️ for Rural India",
+      copyright: "© 2025 GraminRozgar. All rights reserved.",
+      
+      // Chatbot
+      conversationalRegistration: "Conversational Registration",
+      typeYourAnswer: "Type your answer...",
+      allInfoCollected: "All information collected! Click below to complete registration.",
+      completeRegistration: "Complete Registration",
+      completing: "Completing...",
+      
+      // Audio
+      clickMicAndSpeak: "Click the microphone and speak your details:",
+      yourName: "Your name",
+      yourVillage: "Your village/area",
+      yourDistrict: "Your district and state",
+      typeOfWork: "Type of work you do",
+      expectedDailyWage: "Expected daily wage",
+      phoneNumber: "Phone number",
+      recordingSpeakNow: "Recording... Speak now!",
+      processingAudio: "Processing audio...",
+      demoMode: "DEMO MODE",
+      audioTranscriptionDemo: "Audio transcription is currently a mock feature. In production, this would use OpenAI Whisper API to convert your speech to text.",
+      useNormalSignup: "Please use the normal signup form to complete registration.",
     }
   },
   hi: {
