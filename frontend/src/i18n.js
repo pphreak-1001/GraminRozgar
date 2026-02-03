@@ -243,7 +243,6 @@ const resources = {
       noResults: "कोई परिणाम नहीं मिला",
       
       aboutUs: "हमारे बारे में",
-      contact: "संपर्क करें",
       helpline: "हेल्पलाइन",
       language: "भाषा",
       madeWithLove: "ग्रामीण भारत के लिए ❤️ से बनाया गया",
