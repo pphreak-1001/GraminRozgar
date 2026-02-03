@@ -774,20 +774,149 @@ async def get_notifications(current_user = Depends(get_current_user)):
     return notifications
 
 
-# ============ AUDIO TRANSCRIPTION (Mock) ============
+# ============ AUDIO TRANSCRIPTION (Real with OpenAI Whisper) ============
+
+from emergentintegrations.llm.openai import OpenAISpeechToText
+import tempfile
+import re
 
 @app.post("/api/audio/transcribe")
 async def transcribe_audio(file: UploadFile = File(...), language: str = "hi"):
     """
-    Mock audio transcription endpoint
-    In production, this would use OpenAI Whisper API
+    Real audio transcription endpoint using OpenAI Whisper API
+    Supports multiple Indian languages
     """
-    # For now, return a mock response
-    return {
-        "transcribed_text": "Mera naam Raj hai. Main Agra se hoon. Main mason ka kaam karta hoon.",
-        "language": language,
-        "message": "Audio transcription successful (MOCK)"
-    }
+    try:
+        # Map language codes to ISO-639-1 for Whisper
+        lang_map = {
+            "hi": "hi",  # Hindi
+            "bn": "bn",  # Bengali
+            "te": "te",  # Telugu
+            "mr": "mr",  # Marathi
+            "ta": "ta",  # Tamil
+            "gu": "gu",  # Gujarati
+            "kn": "kn",  # Kannada
+            "ml": "ml",  # Malayalam
+            "pa": "pa",  # Punjabi
+            "or": "or",  # Odia
+            "as": "as",  # Assamese
+            "ur": "ur",  # Urdu
+            "en": "en",  # English
+        }
+        
+        whisper_lang = lang_map.get(language, "hi")
+        
+        # Save uploaded file to temp location
+        contents = await file.read()
+        
+        # Create temp file with appropriate extension
+        file_ext = file.filename.split('.')[-1] if '.' in file.filename else 'webm'
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f'.{file_ext}') as temp_file:
+            temp_file.write(contents)
+            temp_path = temp_file.name
+        
+        # Initialize Whisper STT
+        stt = OpenAISpeechToText(api_key=EMERGENT_LLM_KEY)
+        
+        # Transcribe the audio
+        with open(temp_path, "rb") as audio_file:
+            response = await stt.transcribe(
+                file=audio_file,
+                model="whisper-1",
+                response_format="json",
+                language=whisper_lang
+            )
+        
+        # Clean up temp file
+        import os as os_module
+        os_module.unlink(temp_path)
+        
+        transcribed_text = response.text
+        
+        return {
+            "transcribed_text": transcribed_text,
+            "language": language,
+            "message": "Audio transcription successful"
+        }
+        
+    except Exception as e:
+        print(f"Transcription error: {e}")
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
+
+
+@app.post("/api/audio/parse-registration")
+async def parse_registration_from_audio(data: dict):
+    """
+    Parse transcribed audio text to extract registration details using AI
+    """
+    try:
+        text = data.get("text", "")
+        language = data.get("language", "hi")
+        
+        # Language names for prompt
+        lang_names = {
+            "hi": "Hindi",
+            "bn": "Bengali", 
+            "te": "Telugu",
+            "mr": "Marathi",
+            "ta": "Tamil",
+            "gu": "Gujarati",
+            "kn": "Kannada",
+            "ml": "Malayalam",
+            "pa": "Punjabi",
+            "or": "Odia",
+            "as": "Assamese",
+            "ur": "Urdu",
+            "en": "English"
+        }
+        
+        target_lang = lang_names.get(language, "Hindi")
+        
+        # Use LLM to extract structured data from the transcribed text
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"parse_audio_{uuid.uuid4()}",
+            system_message=f"""You are an AI assistant that extracts structured registration information from transcribed speech.
+The speech is in {target_lang}. Extract the following fields if present:
+- name: The person's name
+- area: Village or area name
+- district: District name
+- state: State name
+- job_type: Type of work (Mason, Labour, Plumber, Electrician, Painter)
+- expected_daily_wage: Expected daily wage in rupees (just the number)
+- phone_number: Phone number (10 digits)
+
+Return the data as a valid JSON object with these exact field names. If a field is not found, use null.
+Example output: {{"name": "Raj Kumar", "area": "Agra", "district": "Agra", "state": "Uttar Pradesh", "job_type": "Mason", "expected_daily_wage": 500, "phone_number": "9876543210"}}
+Only output the JSON, nothing else."""
+        ).with_model("openai", "gpt-5.2")
+        
+        result = await chat.send_message(UserMessage(text=f"Extract registration details from this speech: {text}"))
+        
+        # Parse the JSON response
+        import json
+        try:
+            # Clean up the response in case there's markdown formatting
+            clean_result = result.strip()
+            if clean_result.startswith("```"):
+                clean_result = clean_result.split("```")[1]
+                if clean_result.startswith("json"):
+                    clean_result = clean_result[4:]
+            clean_result = clean_result.strip()
+            
+            parsed_data = json.loads(clean_result)
+        except json.JSONDecodeError:
+            parsed_data = {}
+        
+        return {
+            "parsed_data": parsed_data,
+            "original_text": text,
+            "language": language
+        }
+        
+    except Exception as e:
+        print(f"Parsing error: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to parse registration data: {str(e)}")
 
 
 # ============ STARTUP & SHUTDOWN ============
