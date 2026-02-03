@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LogOut, Briefcase, Bell } from 'lucide-react';
+import { LogOut, Briefcase, Bell, TrendingUp, MapPin, DollarSign, Phone, Award, Star } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001/api';
 
 function WorkerDashboard({ user, onLogout }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [matches, setMatches] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,87 +37,195 @@ function WorkerDashboard({ user, onLogout }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-saffron"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-saffron/10 to-heritage-green/10">
+        <div className="text-center">
+          <div className="w-20 h-20 border-4 border-saffron border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-xl font-bold text-gray-700">{t('loading')}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-saffron to-orange-600 text-white shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold" data-testid="worker-dashboard-title">{t('welcomeWorker')}, {user.name}! 🙏</h1>
-              <p className="text-white/90">{t('workerDashboard')}</p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50 to-green-50">
+      {/* Premium Header */}
+      <header className="relative bg-gradient-to-r from-saffron via-orange-600 to-orange-700 text-white shadow-2xl overflow-hidden">
+        {/* Decorative Pattern */}
+        <div className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1767875548584-e8fb112afeb1?w=400&q=80')`,
+            backgroundSize: '200px 200px'
+          }}
+        ></div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            {/* User Info */}
+            <div className="text-center md:text-left">
+              <div className="inline-flex items-center space-x-3 mb-3">
+                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl">
+                  <Award className="w-8 h-8 text-saffron" />
+                </div>
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-black" data-testid="worker-dashboard-title">
+                    {t('welcomeWorker')}, {user.name}! 🙏
+                  </h1>
+                  <p className="text-white/90 text-lg font-medium">{t('workerDashboard')}</p>
+                </div>
+              </div>
+              
+              {/* Stats Pills */}
+              <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
+                  <span className="font-bold">{matches.length}</span> {t('matchedJobs')}
+                </div>
+                <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
+                  <span className="font-bold">{notifications.length}</span> {t('notifications')}
+                </div>
+              </div>
             </div>
+
+            {/* Logout Button */}
             <button
               onClick={onLogout}
               data-testid="logout-button"
-              className="flex items-center space-x-2 bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all"
+              className="bg-white/20 backdrop-blur-md hover:bg-white/30 px-6 py-3 rounded-xl transition-all flex items-center space-x-2 border border-white/30 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               <LogOut className="w-5 h-5" />
-              <span>{t('logout')}</span>
+              <span className="font-bold">{t('logout')}</span>
             </button>
           </div>
         </div>
+
+        {/* Wave Decoration */}
+        <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 60" fill="none">
+          <path d="M0 30C240 10 480 10 720 30C960 50 1200 50 1440 30V60H0V30Z" fill="white" fillOpacity="0.1"/>
+          <path d="M0 45C240 35 480 35 720 45C960 55 1200 55 1440 45V60H0V45Z" fill="white" fillOpacity="0.05"/>
+        </svg>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Job Matches */}
-        <section className="mb-8">
-          <div className="flex items-center space-x-3 mb-6">
-            <Briefcase className="w-8 h-8 text-saffron" />
-            <h2 className="text-2xl font-bold text-gray-900">{t('matchedJobs')}</h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Job Matches - Premium Cards */}
+        <section className="mb-12">
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="w-12 h-12 bg-gradient-to-br from-saffron to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Briefcase className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="text-3xl font-black text-gray-900">{t('matchedJobs')}</h2>
+            <div className="flex-1 h-1 bg-gradient-to-r from-saffron/30 to-transparent rounded"></div>
           </div>
 
           {matches.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <p className="text-gray-600">{t('noMatchesYet')}</p>
+            <div className="bg-white rounded-3xl shadow-xl border-2 border-saffron/20 p-12 text-center">
+              <div className="w-24 h-24 bg-saffron/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Briefcase className="w-12 h-12 text-saffron" />
+              </div>
+              <p className="text-xl text-gray-600 font-medium">{t('noMatchesYet')}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {matches.map((item, idx) => (
-                <div key={idx} className="bg-white rounded-xl shadow-md p-6 border-2 border-green-200 hover:shadow-xl transition-all">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-gray-900">{item.job.title}</h3>
-                    <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">
-                      {Math.round(item.match.match_score)}% {t('matchScore')}
-                    </span>
+                <div key={idx} className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-transparent hover:border-heritage-green">
+                  {/* Match Score Badge */}
+                  <div className="absolute top-4 right-4 z-10">
+                    <div className="bg-gradient-to-br from-green-400 to-green-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2">
+                      <Star className="w-4 h-4" />
+                      <span className="font-black text-sm">{Math.round(item.match.match_score)}%</span>
+                    </div>
                   </div>
-                  <p className="text-gray-700 mb-2">{item.job.description}</p>
-                  <div className="space-y-2 text-sm text-gray-600">
-                    <p>📍 {item.job.village}, {item.job.district}, {item.job.state}</p>
-                    <p className="font-bold text-green-600">💰 ₹{item.job.daily_wage_offered}{t('perDay')}</p>
-                    <p>📞 {t('contact')}: {item.job.contact_number}</p>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <div className="mb-4">
+                      <h3 className="text-2xl font-black text-gray-900 mb-2 group-hover:text-heritage-green transition-colors">
+                        {item.job.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed line-clamp-2">
+                        {item.job.description}
+                      </p>
+                    </div>
+
+                    {/* Info Pills */}
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2 text-gray-700">
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <MapPin className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="font-medium">{item.job.village}, {item.job.district}, {item.job.state}</span>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                          <DollarSign className="w-4 h-4 text-green-600" />
+                        </div>
+                        <span className="text-2xl font-black text-green-600">
+                          ₹{item.job.daily_wage_offered}
+                          <span className="text-sm font-normal text-gray-600">{t('perDay')}</span>
+                        </span>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2 text-gray-700">
+                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                          <Phone className="w-4 h-4 text-purple-600" />
+                        </div>
+                        <span className="font-bold">{t('contact')}: {item.job.contact_number}</span>
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    <a 
+                      href={`tel:${item.job.contact_number}`}
+                      className="mt-6 w-full bg-gradient-to-r from-heritage-green to-green-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
+                    >
+                      <Phone className="w-5 h-5" />
+                      <span>Call Employer</span>
+                    </a>
                   </div>
+
+                  {/* Decorative Corner */}
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-saffron/10 to-transparent rounded-br-full"></div>
                 </div>
               ))}
             </div>
           )}
         </section>
 
-        {/* Notifications */}
+        {/* Notifications - Premium Timeline */}
         <section>
-          <div className="flex items-center space-x-3 mb-6">
-            <Bell className="w-8 h-8 text-saffron" />
-            <h2 className="text-2xl font-bold text-gray-900">{t('notifications')}</h2>
+          <div className="flex items-center space-x-3 mb-8">
+            <div className="w-12 h-12 bg-gradient-to-br from-indigo to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              <Bell className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="text-3xl font-black text-gray-900">{t('notifications')}</h2>
+            <div className="flex-1 h-1 bg-gradient-to-r from-indigo/30 to-transparent rounded"></div>
           </div>
 
           {notifications.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <p className="text-gray-600">{t('noNotifications')}</p>
+            <div className="bg-white rounded-3xl shadow-xl border-2 border-indigo/20 p-12 text-center">
+              <div className="w-24 h-24 bg-indigo/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Bell className="w-12 h-12 text-indigo" />
+              </div>
+              <p className="text-xl text-gray-600 font-medium">{t('noNotifications')}</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {notifications.map((notif, idx) => (
-                <div key={idx} className="bg-white rounded-lg shadow-md p-4 border-l-4 border-saffron">
-                  <p className="text-gray-800">{notif.message}</p>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {new Date(notif.sent_at).toLocaleString()}
-                  </p>
+                <div key={idx} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all border-l-4 border-saffron p-6 flex items-start space-x-4">
+                  <div className="w-12 h-12 bg-saffron/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <TrendingUp className="w-6 h-6 text-saffron" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-gray-800 leading-relaxed font-medium">{notif.message}</p>
+                    <p className="text-sm text-gray-500 mt-2">
+                      {new Date(notif.sent_at).toLocaleString(i18n.language === 'hi' ? 'hi-IN' : 'en-IN', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
