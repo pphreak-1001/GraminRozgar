@@ -265,6 +265,10 @@ const resources = {
       demoMode: "डेमो मोड",
       audioTranscriptionDemo: "ऑडियो ट्रांसक्रिप्शन वर्तमान में एक मॉक फीचर है। प्रोडक्शन में, यह आपकी आवाज को टेक्स्ट में बदलने के लिए OpenAI Whisper API का उपयोग करेगा।",
       useNormalSignup: "कृपया पंजीकरण पूरा करने के लिए सामान्य साइन अप फॉर्म का उपयोग करें।",
+      send: "भेजें",
+      callEmployer: "नियोक्ता को कॉल करें",
+      jobsPosted: "काम पोस्ट किए गए",
+      totalMatches: "कुल मिलान",
     }
   },
   bn: {
