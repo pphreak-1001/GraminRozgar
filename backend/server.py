@@ -302,61 +302,152 @@ async def get_worker_matches(current_user = Depends(get_current_user)):
 
 @app.post("/api/chatbot/conversation")
 async def chatbot_conversation(msg: ChatbotMessage):
-    """Handle chatbot conversation for worker signup"""
+    """Handle chatbot conversation for worker signup - Language Adaptive"""
     
     # Get or create session
     session = await chatbot_sessions_collection.find_one({"session_id": msg.session_id})
     
     if not session:
-        # New session - initialize
+        # New session - initialize with language-specific greeting
+        greetings = {
+            "hi": "नमस्ते! मैं आपका साथी हूं। आइए शुरू करते हैं। आपका नाम क्या है?",
+            "en": "Hello! I'm here to help you register. What is your name?",
+            "bn": "নমস্কার! আমি আপনার সাহায্যকারী। আপনার নাম কি?",
+            "te": "నమస్కారం! నేను మీకు సహాయం చేస్తాను। మీ పేరు ఏమిటి?",
+            "mr": "नमस्कार! मी तुम्हाला मदत करेन। तुमचे नाव काय आहे?",
+            "ta": "வணக்கம்! நான் உங்களுக்கு உதவுவேன். உங்கள் பெயர் என்ன?",
+            "gu": "નમસ્તે! હું તમારી મદદ કરીશ। તમારું નામ શું છે?",
+        }
+        
         session = {
             "session_id": msg.session_id,
             "messages": [],
             "data": {},
-            "step": "greeting",
+            "current_step": "name",
             "language": msg.language,
             "created_at": datetime.utcnow()
         }
         await chatbot_sessions_collection.insert_one(session)
+        
+        greeting = greetings.get(msg.language, greetings["hi"])
+        session["messages"].append({"role": "assistant", "content": greeting})
+        await chatbot_sessions_collection.update_one(
+            {"session_id": msg.session_id},
+            {"$set": {"messages": session["messages"]}}
+        )
+        
+        return {"response": greeting, "session_id": msg.session_id}
     
     # Append user message
     session["messages"].append({"role": "user", "content": msg.message})
     
-    # Create chatbot instance
-    system_prompt = """You are a helpful assistant for GraminRozgar, a rural employment platform in India. 
-    Your job is to help workers sign up by collecting their information in a conversational way.
-    Ask one question at a time. Be warm, friendly, and use simple language.
+    # Determine current step and next question
+    current_step = session.get("current_step", "name")
     
-    Collect the following information in order:
-    1. Name (Aapka naam kya hai?)
-    2. Area/Village (Aap kahan rehte hain? Gaon ya shehar?)
-    3. District (Aapka zilaa?)
-    4. State (Aapka raajya?)
-    5. Job Type (Aap kya kaam karte hain? Mason, Labour, Plumber, Electrician, ya Painter?)
-    6. Expected daily wage (Aapko roz kitne paise chahiye?)
-    7. Phone number (Aapka mobile number?)
+    # Language-specific questions
+    questions = {
+        "hi": {
+            "area": "बहुत अच्छा! आप कहाँ रहते हैं? (गाँव/शहर का नाम)",
+            "district": "धन्यवाद! आपका जिला कौन सा है?",
+            "state": "अच्छा! आपका राज्य कौन सा है?",
+            "job_type": "समझ गया! आप किस तरह का काम करते हैं?\n1. राजमिस्त्री (Mason)\n2. मजदूर (Labour)\n3. प्लंबर (Plumber)\n4. बिजली मिस्त्री (Electrician)\n5. पेंटर (Painter)",
+            "wage": "बढ़िया! आप रोज़ कितने पैसे की उम्मीद करते हैं? (₹)",
+            "phone": "लगभग हो गया! आपका मोबाइल नंबर क्या है?",
+            "complete": "बहुत बढ़िया! मैंने सारी जानकारी इकट्ठा कर ली है। अब 'Complete Registration' बटन पर क्लिक करें।"
+        },
+        "en": {
+            "area": "Great! Where do you live? (Village/Town name)",
+            "district": "Thank you! Which district are you in?",
+            "state": "Good! Which state?",
+            "job_type": "Understood! What type of work do you do?\n1. Mason\n2. Labour\n3. Plumber\n4. Electrician\n5. Painter",
+            "wage": "Excellent! What daily wage do you expect? (₹)",
+            "phone": "Almost done! What is your mobile number?",
+            "complete": "Perfect! I have collected all information. Now click the 'Complete Registration' button."
+        },
+        "bn": {
+            "area": "দুর্দান্ত! আপনি কোথায় থাকেন? (গ্রাম/শহর)",
+            "district": "ধন্যবাদ! আপনার জেলা কোনটি?",
+            "state": "ভাল! কোন রাজ্য?",
+            "job_type": "বুঝলাম! আপনি কী ধরনের কাজ করেন?\n1. রাজমিস্ত্রি\n2. শ্রমিক\n3. প্লাম্বার\n4. ইলেকট্রিশিয়ান\n5. পেইন্টার",
+            "wage": "চমৎকার! আপনি কত দৈনিক মজুরি আশা করেন? (₹)",
+            "phone": "প্রায় শেষ! আপনার মোবাইল নম্বর কত?",
+            "complete": "নিখুঁত! আমি সব তথ্য সংগ্রহ করেছি। এখন 'Complete Registration' বোতামে ক্লিক করুন।"
+        }
+    }
     
-    After collecting all information, confirm and say registration is complete."""
+    lang_questions = questions.get(msg.language, questions["hi"])
     
-    chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
-        session_id=msg.session_id,
-        system_message=system_prompt
-    ).with_model("openai", "gpt-5.2")
+    # Store the user's response and determine next step
+    response_text = ""
+    next_step = current_step
     
-    user_message = UserMessage(text=msg.message)
-    response = await chat.send_message(user_message)
+    if current_step == "name":
+        session["data"]["name"] = msg.message
+        response_text = lang_questions["area"]
+        next_step = "area"
+    
+    elif current_step == "area":
+        session["data"]["area"] = msg.message
+        response_text = lang_questions["district"]
+        next_step = "district"
+    
+    elif current_step == "district":
+        session["data"]["district"] = msg.message
+        response_text = lang_questions["state"]
+        next_step = "state"
+    
+    elif current_step == "state":
+        session["data"]["state"] = msg.message
+        response_text = lang_questions["job_type"]
+        next_step = "job_type"
+    
+    elif current_step == "job_type":
+        # Map responses to job types
+        job_mapping = {
+            "1": "Mason", "mason": "Mason", "राजमिस्त्री": "Mason", "রাজমিস্ত্রি": "Mason",
+            "2": "Labour", "labour": "Labour", "मजदूर": "Labour", "শ্রমিক": "Labour",
+            "3": "Plumber", "plumber": "Plumber", "प्लंबर": "Plumber", "প্লাম্বার": "Plumber",
+            "4": "Electrician", "electrician": "Electrician", "बिजली": "Electrician", "ইলেকট্রিশিয়ান": "Electrician",
+            "5": "Painter", "painter": "Painter", "पेंटर": "Painter", "পেইন্টার": "Painter"
+        }
+        user_input = msg.message.lower().strip()
+        session["data"]["job_type"] = job_mapping.get(user_input, "Labour")
+        response_text = lang_questions["wage"]
+        next_step = "wage"
+    
+    elif current_step == "wage":
+        # Extract number from response
+        import re
+        numbers = re.findall(r'\d+', msg.message)
+        wage = int(numbers[0]) if numbers else 500
+        session["data"]["expected_daily_wage"] = wage
+        response_text = lang_questions["phone"]
+        next_step = "phone"
+    
+    elif current_step == "phone":
+        # Extract phone number
+        import re
+        numbers = re.findall(r'\d+', msg.message)
+        phone = ''.join(numbers) if numbers else msg.message
+        session["data"]["phone_number"] = phone
+        response_text = lang_questions["complete"]
+        next_step = "complete"
     
     # Append bot response
-    session["messages"].append({"role": "assistant", "content": response})
+    session["messages"].append({"role": "assistant", "content": response_text})
     
     # Update session in database
     await chatbot_sessions_collection.update_one(
         {"session_id": msg.session_id},
-        {"$set": {"messages": session["messages"], "updated_at": datetime.utcnow()}}
+        {"$set": {
+            "messages": session["messages"],
+            "data": session["data"],
+            "current_step": next_step,
+            "updated_at": datetime.utcnow()
+        }}
     )
     
-    return {"response": response, "session_id": msg.session_id}
+    return {"response": response_text, "session_id": msg.session_id, "step": next_step}
 
 
 @app.post("/api/chatbot/complete-registration")
@@ -366,39 +457,13 @@ async def complete_chatbot_registration(session_id: str):
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
     
-    # Extract data from conversation using AI
-    messages_text = "\n".join([f"{m['role']}: {m['content']}" for m in session["messages"]])
+    data = session.get("data", {})
     
-    extraction_prompt = f"""From this conversation, extract the worker's information and return ONLY a JSON object with these exact fields:
-    {{
-        "name": "extracted name",
-        "area": "village/town name",
-        "district": "district name",
-        "state": "state name",
-        "job_type": "one of: Mason, Labour, Plumber, Electrician, Painter",
-        "expected_daily_wage": numeric value,
-        "phone_number": "phone number"
-    }}
-    
-    Conversation:
-    {messages_text}
-    
-    Return ONLY the JSON, no other text."""
-    
-    chat = LlmChat(
-        api_key=EMERGENT_LLM_KEY,
-        session_id=session_id + "_extract",
-        system_message="You extract structured data from conversations and return only JSON."
-    ).with_model("openai", "gpt-5.2")
-    
-    extracted = await chat.send_message(UserMessage(text=extraction_prompt))
-    
-    # Parse the extracted data
-    import json
-    try:
-        data = json.loads(extracted)
-    except:
-        raise HTTPException(status_code=400, detail="Could not extract complete information from conversation")
+    # Validate all required fields
+    required_fields = ["name", "area", "district", "state", "job_type", "expected_daily_wage", "phone_number"]
+    for field in required_fields:
+        if field not in data:
+            raise HTTPException(status_code=400, detail=f"Missing field: {field}")
     
     # Create user account
     user_id = str(uuid.uuid4())
