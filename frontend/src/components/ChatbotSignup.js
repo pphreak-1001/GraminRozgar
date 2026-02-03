@@ -144,7 +144,7 @@ function ChatbotSignup({ onClose, onSuccess }) {
         ) : (
           <div className="p-6 bg-green-50 border-t border-green-200">
             <p className="text-center text-green-800 font-medium mb-4">
-              ✅ All information collected! Click below to complete registration.
+              ✅ {t('allInfoCollected')}
             </p>
             <button
               onClick={completeRegistration}
@@ -152,7 +152,7 @@ function ChatbotSignup({ onClose, onSuccess }) {
               data-testid="complete-chatbot-registration"
               className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-all disabled:opacity-50"
             >
-              {loading ? 'Completing...' : 'Complete Registration'}
+              {loading ? t('completing') : t('completeRegistration')}
             </button>
           </div>
         )}
