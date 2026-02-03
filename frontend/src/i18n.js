@@ -114,7 +114,6 @@ const resources = {
       
       // Footer
       aboutUs: "About Us",
-      contact: "Contact",
       helpline: "Helpline",
       language: "Language",
       madeWithLove: "Made with ❤️ for Rural India",
