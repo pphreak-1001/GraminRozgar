@@ -136,10 +136,10 @@ function EmployerDashboard({ user, onLogout }) {
               {/* Stats */}
               <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                 <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
-                  <span className="font-bold">{myJobs.length}</span> Jobs Posted
+                  <span className="font-bold">{myJobs.length}</span> {t('jobsPosted')}
                 </div>
                 <div className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/30">
-                  <span className="font-bold">{myJobs.reduce((sum, job) => sum + job.match_count, 0)}</span> Total Matches
+                  <span className="font-bold">{myJobs.reduce((sum, job) => sum + job.match_count, 0)}</span> {t('totalMatches')}
                 </div>
               </div>
             </div>
