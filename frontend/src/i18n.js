@@ -88,7 +88,6 @@ const resources = {
       viewMatchedWorkers: "View Matched Workers",
       matchedWorkersFor: "Matched Workers for:",
       noWorkersMatched: "No worker matches yet. The matching engine runs every 5 minutes.",
-      expectedWage: "Expected Wage",
       
       // Job Form
       jobTitle: "Job Title",
