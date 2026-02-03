@@ -178,7 +178,7 @@ function WorkerDashboard({ user, onLogout }) {
                       className="mt-6 w-full bg-gradient-to-r from-heritage-green to-green-600 text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center space-x-2"
                     >
                       <Phone className="w-5 h-5" />
-                      <span>Call Employer</span>
+                      <span>{t('callEmployer')}</span>
                     </a>
                   </div>
 
