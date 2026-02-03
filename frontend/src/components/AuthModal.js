@@ -133,7 +133,7 @@ function AuthModal({ onClose, onSuccess }) {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Role *
+                    {t('role')} *
                   </label>
                   <select
                     name="role"
