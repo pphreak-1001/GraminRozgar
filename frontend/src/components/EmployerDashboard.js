@@ -109,8 +109,8 @@ function EmployerDashboard({ user, onLogout }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold" data-testid="employer-dashboard-title">Welcome, {user.name}! 👋</h1>
-              <p className="text-white/90">Employer Dashboard</p>
+              <h1 className="text-3xl font-bold" data-testid="employer-dashboard-title">{t('welcomeEmployer')}, {user.name}! 👋</h1>
+              <p className="text-white/90">{t('employerDashboard')}</p>
             </div>
             <button
               onClick={onLogout}
