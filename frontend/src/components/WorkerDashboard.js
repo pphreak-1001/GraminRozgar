@@ -70,12 +70,12 @@ function WorkerDashboard({ user, onLogout }) {
         <section className="mb-8">
           <div className="flex items-center space-x-3 mb-6">
             <Briefcase className="w-8 h-8 text-saffron" />
-            <h2 className="text-2xl font-bold text-gray-900">Matched Jobs for You</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{t('matchedJobs')}</h2>
           </div>
 
           {matches.length === 0 ? (
             <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <p className="text-gray-600">No job matches yet. We'll notify you when we find suitable work!</p>
+              <p className="text-gray-600">{t('noMatchesYet')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -84,14 +84,14 @@ function WorkerDashboard({ user, onLogout }) {
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-xl font-bold text-gray-900">{item.job.title}</h3>
                     <span className="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">
-                      {Math.round(item.match.match_score)}% Match
+                      {Math.round(item.match.match_score)}% {t('matchScore')}
                     </span>
                   </div>
                   <p className="text-gray-700 mb-2">{item.job.description}</p>
                   <div className="space-y-2 text-sm text-gray-600">
                     <p>📍 {item.job.village}, {item.job.district}, {item.job.state}</p>
-                    <p className="font-bold text-green-600">💰 ₹{item.job.daily_wage_offered}/day</p>
-                    <p>📞 Contact: {item.job.contact_number}</p>
+                    <p className="font-bold text-green-600">💰 ₹{item.job.daily_wage_offered}{t('perDay')}</p>
+                    <p>📞 {t('contact')}: {item.job.contact_number}</p>
                   </div>
                 </div>
               ))}
@@ -103,12 +103,12 @@ function WorkerDashboard({ user, onLogout }) {
         <section>
           <div className="flex items-center space-x-3 mb-6">
             <Bell className="w-8 h-8 text-saffron" />
-            <h2 className="text-2xl font-bold text-gray-900">Notifications</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{t('notifications')}</h2>
           </div>
 
           {notifications.length === 0 ? (
             <div className="bg-white rounded-xl shadow-md p-8 text-center">
-              <p className="text-gray-600">No notifications yet.</p>
+              <p className="text-gray-600">{t('noNotifications')}</p>
             </div>
           ) : (
             <div className="space-y-3">
