@@ -24,6 +24,54 @@ EMERGENT_LLM_KEY = os.getenv("EMERGENT_LLM_KEY")
 JWT_ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 24
 
+# Translation cache to avoid repeated API calls
+translation_cache = {}
+
+async def translate_text(text: str, target_language: str) -> str:
+    """Translate text to target language using OpenAI"""
+    if not text or target_language == "en":
+        return text
+    
+    # Check cache
+    cache_key = f"{text}_{target_language}"
+    if cache_key in translation_cache:
+        return translation_cache[cache_key]
+    
+    try:
+        # Language names for prompt
+        lang_names = {
+            "hi": "Hindi",
+            "bn": "Bengali", 
+            "te": "Telugu",
+            "mr": "Marathi",
+            "ta": "Tamil",
+            "gu": "Gujarati",
+            "kn": "Kannada",
+            "ml": "Malayalam",
+            "pa": "Punjabi",
+            "or": "Odia",
+            "as": "Assamese",
+            "ur": "Urdu"
+        }
+        
+        target_lang_name = lang_names.get(target_language, "Hindi")
+        
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"translate_{cache_key}",
+            system_message=f"You are a professional translator. Translate the given text to {target_lang_name}. Return ONLY the translated text, nothing else. Keep the meaning accurate and natural."
+        ).with_model("openai", "gpt-5.2")
+        
+        translated = await chat.send_message(UserMessage(text=text))
+        
+        # Cache the result
+        translation_cache[cache_key] = translated
+        return translated
+        
+    except Exception as e:
+        print(f"Translation error: {e}")
+        return text  # Return original on error
+
 # Initialize FastAPI
 app = FastAPI(title="GraminRozgar API")
 
